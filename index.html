@@ -20,6 +20,8 @@
             padding: 20px;
             background-color: white;
             text-align: center;
+            border-radius: 15px;
+
         }
 
         .image-frame {
@@ -41,18 +43,21 @@
 
         .button-list {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: 8px;
             margin-top: 20px;
         }
 
         .topic-button {
-            padding: 10px;
+            padding: 6px 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
+            border-radius: 15px;
             cursor: pointer;
             transition: transform 0.3s ease;
+            font-size: 14px;
         }
 
         .topic-button:disabled {
@@ -62,6 +67,12 @@
 
         .topic-button:hover:not(:disabled) {
             transform: scale(1.1);
+        }
+
+        /* Ensure the last row has only 2 buttons centered */
+        .button-list > :nth-child(n+9) {
+            grid-column: span 2;
+            justify-self: center;
         }
 
         .notification-area {
@@ -138,6 +149,7 @@
         {src: 'images/img6.gif', topic: '歪歪扭扭'},
         {src: 'images/img7.gif', topic: '蚊子'},
         {src: 'images/img8.webp', topic: '叮'},
+        {src: 'images/img9.gif', topic: '靠'},
         {src: 'images/img9.gif', topic: '靠'},
         // {src: 'images//api/placeholder/300/200', topic: 'History'}
     ];
@@ -243,7 +255,7 @@
         // Add time result to congratulations message
         congratulationsDiv.innerHTML = `
                 Congratulations! You've matched all images!<br>
-                Time Finished: ${finalTime.toFixed(3)} seconds
+                Time Finished: ${finalTime.toFixed(2)} seconds
             `;
     }
 
