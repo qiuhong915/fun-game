@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Topic Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .game-container {
+            width: 500px;
+            border: 2px solid #333;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .image-frame {
+            width: 400px;
+            height: 300px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .game-image {
+            max-width: 100%;
+            max-height: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .button-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .topic-button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .topic-button:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-area {
+            margin-top: 20px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            display: none;
+        }
+
+        .success-icon {
+            color: green;
+        }
+
+        .fail-icon {
+            color: red;
+        }
+
+        .congratulations {
+            display: none;
+            color: green;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="image-frame">
+        <img id="gameImage" class="game-image" src="" alt="Game Image">
+    </div>
+    <div class="notification-area">
+        <img id="successIcon" class="notification-icon success-icon" src="images/success-icon.png" alt="Success">
+        <img id="failIcon" class="notification-icon fail-icon" src="images/fail-icon.png" alt="Fail">
+    </div>
+    <div class="button-list" id="buttonList">
+        <!-- Buttons will be dynamically added here -->
+    </div>
+    <div id="congratulations" class="congratulations">
+        恭喜你！这是你获得的奖品
+    </div>
+</div>
+
+<script>
+    const images = [
+        {src: 'images/img1.jpeg', topic: '恩爱'},
+        {src: 'images/img2.png', topic: '患难与共'},
+        {src: 'images/img3.webp', topic: '肩膀'},
+        {src: 'images/img4.jpeg', topic: '女士'},
+        {src: 'images/img5.gif', topic: '瘫痪'},
+        {src: 'images/img6.gif', topic: '歪歪扭扭'},
+        {src: 'images/img7.gif', topic: '蚊子'},
+        {src: 'images/img8.webp', topic: '叮'},
+        {src: 'images/img9.gif', topic: '靠'},
+        // {src: 'images//api/placeholder/300/200', topic: 'History'}
+    ];
+
+    let currentImageIndex = 0;
+    let correctGuesses = 0;
+
+    const gameImage = document.getElementById('gameImage');
+    const buttonList = document.getElementById('buttonList');
+    const successIcon = document.getElementById('successIcon');
+    const failIcon = document.getElementById('failIcon');
+    const congratulationsDiv = document.getElementById('congratulations');
+
+    function shuffleTopics() {
+        return images.map(img => img.topic).sort(() => Math.random() - 0.5);
+    }
+
+    function setupGame() {
+        // Set first image
+        gameImage.src = images[currentImageIndex].src;
+
+        // Create buttons with shuffled topics
+        const topics = shuffleTopics();
+        buttonList.innerHTML = '';
+        topics.forEach(topic => {
+            const button = document.createElement('button');
+            button.textContent = topic;
+            button.classList.add('topic-button');
+            button.addEventListener('click', () => checkTopic(topic));
+            buttonList.appendChild(button);
+        });
+    }
+
+    function checkTopic(selectedTopic) {
+        const currentImage = images[currentImageIndex];
+
+        if (selectedTopic === currentImage.topic) {
+            showNotification(true);
+            correctGuesses++;
+
+            if (correctGuesses === images.length) {
+                gameCompleted();
+            } else {
+                setTimeout(nextImage, 300);
+            }
+        } else {
+            showNotification(false);
+        }
+    }
+
+    function showNotification(isSuccess) {
+        successIcon.style.display = isSuccess ? 'block' : 'none';
+        failIcon.style.display = !isSuccess ? 'block' : 'none';
+
+        setTimeout(() => {
+            successIcon.style.display = 'none';
+            failIcon.style.display = 'none';
+        }, 2500);
+    }
+
+    function nextImage() {
+        currentImageIndex++;
+        gameImage.style.opacity = 0;
+
+        setTimeout(() => {
+            gameImage.src = images[currentImageIndex].src;
+            gameImage.style.opacity = 1;
+            setupGame();
+        }, 500);
+    }
+
+    function gameCompleted() {
+        gameImage.src = 'images/KEYS.jpeg'; // Success image
+        buttonList.style.display = 'none';
+        document.querySelector('.notification-area').style.display = 'none';
+        congratulationsDiv.style.display = 'block';
+    }
+
+    // Initialize game
+    setupGame();
+</script>
+</body>
+</html>
