@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Topic Guessing Game</title>
+    <title>Image Topic Guessing Game with Continuous Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,7 +55,12 @@
             transition: transform 0.3s ease;
         }
 
-        .topic-button:hover {
+        .topic-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .topic-button:hover:not(:disabled) {
             transform: scale(1.1);
         }
 
@@ -81,16 +86,30 @@
             color: red;
         }
 
-        .congratulations {
+        .timer {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .congratulations, .game-over {
             display: none;
-            color: green;
             margin-top: 20px;
             font-size: 24px;
+        }
+
+        .congratulations {
+            color: green;
+        }
+
+        .game-over {
+            color: red;
         }
     </style>
 </head>
 <body>
 <div class="game-container">
+    <div class="timer" id="timer">Time: 15s</div>
     <div class="image-frame">
         <img id="gameImage" class="game-image" src="" alt="Game Image">
     </div>
@@ -103,6 +122,9 @@
     </div>
     <div id="congratulations" class="congratulations">
         恭喜你！这是你获得的奖品
+    </div>
+    <div id="gameOver" class="game-over">
+        Game Over! Time Limit Exceeded
     </div>
 </div>
 
@@ -122,12 +144,15 @@
 
     let currentImageIndex = 0;
     let correctGuesses = 0;
+    let startTime, timerInterval;
 
     const gameImage = document.getElementById('gameImage');
     const buttonList = document.getElementById('buttonList');
     const successIcon = document.getElementById('successIcon');
     const failIcon = document.getElementById('failIcon');
+    const timerDisplay = document.getElementById('timer');
     const congratulationsDiv = document.getElementById('congratulations');
+    const gameOverDiv = document.getElementById('gameOver');
 
     function shuffleTopics() {
         return images.map(img => img.topic).sort(() => Math.random() - 0.5);
@@ -149,6 +174,26 @@
         });
     }
 
+    // Start the game with a single timer
+    function startGame() {
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 10);
+        setupGame();
+    }
+
+    function updateTimer() {
+        const currentTime = Date.now();
+        const elapsedTime = (currentTime - startTime) / 1000;
+
+        if (elapsedTime >= 15) {
+            clearInterval(timerInterval);
+            gameOver();
+            return;
+        }
+
+        timerDisplay.textContent = `Time: ${Math.ceil(15 - elapsedTime)}s`;
+    }
+
     function checkTopic(selectedTopic) {
         const currentImage = images[currentImageIndex];
 
@@ -157,6 +202,7 @@
             correctGuesses++;
 
             if (correctGuesses === images.length) {
+                clearInterval(timerInterval);
                 gameCompleted();
             } else {
                 setTimeout(nextImage, 300);
@@ -188,14 +234,35 @@
     }
 
     function gameCompleted() {
+        const finalTime = 15 - ((Date.now() - startTime) / 1000);
         gameImage.src = 'images/KEYS.jpeg'; // Success image
         buttonList.style.display = 'none';
         document.querySelector('.notification-area').style.display = 'none';
         congratulationsDiv.style.display = 'block';
+
+        // Add time result to congratulations message
+        congratulationsDiv.innerHTML = `
+                Congratulations! You've matched all images!<br>
+                Time Finished: ${finalTime.toFixed(3)} seconds
+            `;
+    }
+
+    function gameOver() {
+        // Disable all buttons
+        const buttons = document.querySelectorAll('.topic-button');
+        buttons.forEach(button => button.disabled = true);
+
+        // Show game over message with points
+        gameOverDiv.innerHTML = `
+                Game Over! Time Limit Exceeded<br>
+                Points: ${correctGuesses} / 10
+            `;
+        gameOverDiv.style.display = 'block';
+        timerDisplay.textContent = 'Time: 0s';
     }
 
     // Initialize game
-    setupGame();
+    startGame();
 </script>
 </body>
 </html>
