@@ -1,0 +1,37 @@
+Prompt Fun Game
+Dùng Claude.ai: AI hỗ trợ tốt hơn cho việc code theo yêu cầu
+
+Step 1: Provide requirements: details, clarify, points by points
+Help me build a small project which can run by html and javascript.
+Here is the requirements:
+1. There a a medium frame in the webpage. inside it will be a small image frame and below the small frame is a list of 10 buttons. 
+2. i have 10 images in the small frame, and they can be jpg, png or gif file, and each image is about a subject/topic. List of buttons are about topics of images.
+3.  And only one image can be showed until the right button about its topic is clicked. When click the right topic button of the image, there is a transition/animation effect to show the next image in the image list.
+4. there is a notification area below the button list. when click right topic button of the appeared image, show a success icon in the area in 3s, otherwise show a fail icon in the are in 3s. 
+5. add a zoom-in effect when hover any button
+6. after 10 correct images topic is choose, show a success image in the image frame, a success congratulation message, and also hide the buttons list and notification area.
+
+
+
+
+Step 2. Add timer feature
+I want to add a timer 15s for the game. If finish the game in 15s, beside show success image, show the result message about time finish in second and milisecond with double value with 3 places. If cannot finish the game in 15s, disable all the buttons list and show a small fames with fail message, points over 10.
+
+
+
+
+Step 3. Fix timer bug
+Add these:
+1. countdown just show second in integer value
+2. When the timer reaches 0: add message about points: correct chooses
+
+
+
+
+Step 4: Fix timer bug 2
+fix bug: when click right button, the timer is reload. I want timer is for all 10 buttons
+
+
+
+Step 5: Fix design 
+For the buttons list, i want 3 rows, 2 first rows contains 4 buttons each, the last row contains 2 buttons. Button size should be smaller, with rounded border
