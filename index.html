@@ -120,7 +120,7 @@
 </head>
 <body>
 <div class="game-container">
-    <div class="timer" id="timer">Time: 15s</div>
+    <div class="timer" id="timer">Time: 60s</div>
     <div class="image-frame">
         <img id="gameImage" class="game-image" src="" alt="Game Image">
     </div>
@@ -197,13 +197,13 @@
         const currentTime = Date.now();
         const elapsedTime = (currentTime - startTime) / 1000;
 
-        if (elapsedTime >= 15) {
+        if (elapsedTime >= 60) {
             clearInterval(timerInterval);
             gameOver();
             return;
         }
 
-        timerDisplay.textContent = `Time: ${Math.ceil(15 - elapsedTime)}s`;
+        timerDisplay.textContent = `Time: ${Math.ceil(60 - elapsedTime)}s`;
     }
 
     function checkTopic(selectedTopic) {
@@ -217,7 +217,7 @@
                 clearInterval(timerInterval);
                 gameCompleted();
             } else {
-                setTimeout(nextImage, 300);
+                setTimeout(nextImage, 50);
             }
         } else {
             showNotification(false);
@@ -242,11 +242,11 @@
             gameImage.src = images[currentImageIndex].src;
             gameImage.style.opacity = 1;
             setupGame();
-        }, 500);
+        }, 50);
     }
 
     function gameCompleted() {
-        const finalTime = 15 - ((Date.now() - startTime) / 1000);
+        const finalTime = 60 - ((Date.now() - startTime) / 1000);
         gameImage.src = 'images/KEYS.jpeg'; // Success image
         buttonList.style.display = 'none';
         document.querySelector('.notification-area').style.display = 'none';
