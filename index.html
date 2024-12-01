@@ -217,7 +217,7 @@
                 clearInterval(timerInterval);
                 gameCompleted();
             } else {
-                setTimeout(nextImage, 50);
+                setTimeout(nextImage, 0);
             }
         } else {
             showNotification(false);
@@ -242,7 +242,7 @@
             gameImage.src = images[currentImageIndex].src;
             gameImage.style.opacity = 1;
             setupGame();
-        }, 50);
+        }, 0);
     }
 
     function gameCompleted() {
