@@ -49,7 +49,7 @@
             margin-top: 20px;
         }
 
-        .topic-button {
+        .topic-button, .start-button {
             padding: 6px 10px;
             background-color: #4CAF50;
             color: white;
@@ -116,14 +116,53 @@
         .game-over {
             color: red;
         }
+
+        .start-screen {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background-color: rgba(0,0,0,0.7);
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            color: white;
+
+            z-index: 100;
+
+        }
     </style>
 </head>
 <body>
 <div class="game-container">
-    <div class="timer" id="timer">Time: 60s</div>
+    <div class="start-screen">
+        <p>任务：如果你在“看图选词或词组”的游戏中全部回答正确，<br>你将赢得一个奖品。请告诉老师你获得的是什么奖品</p>
+        <button class="start-button">Start Game</button>
+    </div>
+    
+    <div class="timer" id="timer">时间: 60秒</div>
+    
     <div class="image-frame">
         <img id="gameImage" class="game-image" src="" alt="Game Image">
+        
+        <div class="image-frame2">
+            <img id="game-image2" src="images/img10.png" alt="Start Image">
+        </div>
     </div>
+    
     <div class="notification-area">
         <img id="successIcon" class="notification-icon success-icon" src="images/success-icon.png" alt="Success">
         <img id="failIcon" class="notification-icon fail-icon" src="images/fail-icon.png" alt="Fail">
@@ -142,16 +181,15 @@
 <script>
     const images = [
         {src: 'images/img1.jpeg', topic: '恩爱'},
-        {src: 'images/img2.png', topic: '患难与共'},
-        {src: 'images/img3.webp', topic: '肩膀'},
-        {src: 'images/img4.jpeg', topic: '女士'},
-        {src: 'images/img5.gif', topic: '瘫痪'},
-        {src: 'images/img6.gif', topic: '歪歪扭扭'},
-        {src: 'images/img7.gif', topic: '蚊子'},
-        {src: 'images/img8.webp', topic: '叮'},
-        {src: 'images/img9.gif', topic: '靠'},
-        {src: 'images/img9.gif', topic: '靠'},
-        // {src: 'images//api/placeholder/300/200', topic: 'History'}
+        // {src: 'images/img2.png', topic: '患难与共'},
+        // {src: 'images/img3.webp', topic: '肩膀'},
+        // {src: 'images/img4.jpeg', topic: '女士'},
+        // {src: 'images/img5.gif', topic: '瘫痪'},
+        // {src: 'images/img6.gif', topic: '歪歪扭扭'},
+        // {src: 'images/img7.gif', topic: '蚊子'},
+        // {src: 'images/img8.webp', topic: '叮'},
+        // {src: 'images/img9.gif', topic: '靠'},
+        {src: 'images/img10.png', topic: '相敬如宾'},
     ];
 
     let currentImageIndex = 0;
@@ -165,6 +203,10 @@
     const timerDisplay = document.getElementById('timer');
     const congratulationsDiv = document.getElementById('congratulations');
     const gameOverDiv = document.getElementById('gameOver');
+
+    const imageFrame2 = document.querySelector('.image-frame2');
+    const startScreen = document.querySelector('.start-screen');
+    const startButton = document.querySelector('.start-button');
 
     function shuffleTopics() {
         return images.map(img => img.topic).sort(() => Math.random() - 0.5);
@@ -188,6 +230,8 @@
 
     // Start the game with a single timer
     function startGame() {
+        startScreen.style.display = 'none';
+        imageFrame2.style.display = 'none';
         startTime = Date.now();
         timerInterval = setInterval(updateTimer, 10);
         setupGame();
@@ -254,8 +298,8 @@
 
         // Add time result to congratulations message
         congratulationsDiv.innerHTML = `
-                Congratulations! You've matched all images!<br>
-                Time Finished: ${finalTime.toFixed(2)} seconds
+                恭喜你！这是你获得的奖品<br>
+                总时间：${finalTime.toFixed(2)} 秒
             `;
     }
 
@@ -266,15 +310,17 @@
 
         // Show game over message with points
         gameOverDiv.innerHTML = `
-                Game Over! Time Limit Exceeded<br>
-                Points: ${correctGuesses} / 10
+                时间到了！请再试一次<br>
+                总分: ${correctGuesses} / 10
             `;
         gameOverDiv.style.display = 'block';
         timerDisplay.textContent = 'Time: 0s';
     }
 
+    startButton.addEventListener('click', startGame);
+
     // Initialize game
-    startGame();
+    // startGame();
 </script>
 </body>
 </html>
