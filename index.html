@@ -207,6 +207,31 @@
     const imageFrame2 = document.querySelector('.image-frame2');
     const startScreen = document.querySelector('.start-screen');
     const startButton = document.querySelector('.start-button');
+    let preloadedImages = [];
+
+
+    async function preloadImages() {
+        return new Promise((resolve) => {
+            let loadedCount = 0;
+
+            images.forEach((imageData, index) => {
+                const img = new Image();
+                img.onload = () => {
+                    loadedCount++;
+                    preloadedImages[index] = img;
+
+                    if (loadedCount === images.length) {
+                        setTimeout(resolve, 500); // Small delay to show complete loading
+                    }
+                };
+                img.onerror = () => {
+                    console.error(`Failed to load image: ${imageData.src}`);
+                    loadedCount++;
+                };
+                img.src = imageData.src;
+            });
+        });
+    }
 
     function shuffleTopics() {
         return images.map(img => img.topic).sort(() => Math.random() - 0.5);
@@ -247,7 +272,7 @@
             return;
         }
 
-        timerDisplay.textContent = `总时间：: ${Math.ceil(60 - elapsedTime)}秒`;
+        timerDisplay.textContent = `总时间: ${Math.ceil(60 - elapsedTime)}秒`;
     }
 
     function checkTopic(selectedTopic) {
@@ -317,6 +342,7 @@
         timerDisplay.textContent = 'Time: 0s';
     }
 
+    preloadImages();
     startButton.addEventListener('click', startGame);
 
     // Initialize game
